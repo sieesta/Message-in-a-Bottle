@@ -20,7 +20,10 @@ async function searchSpotifyTracks(query) {
             body: JSON.stringify({ query: query })
         });
         
-        if (!response.ok) throw new Error('Edge function failed');
+        if (!response.ok) {
+            console.warn("Edge Function failed. Ensure it is deployed to Supabase.");
+            throw new Error('Edge function failed - is it deployed?');
+        }
         
         const data = await response.json();
         return data.tracks.items;

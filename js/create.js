@@ -38,8 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         searchTimeout = setTimeout(async () => {
-            const tracks = await searchSpotifyTracks(query);
-            renderSearchResults(tracks);
+            try {
+                const tracks = await searchSpotifyTracks(query);
+                renderSearchResults(tracks);
+            } catch (err) {
+                searchResults.innerHTML = '<div style="padding:1rem; color:red; text-align:center;">Spotify Search failed. Deploy the Edge Function.</div>';
+                searchResults.classList.add('active');
+            }
         }, 500); // 500ms debounce
     });
 

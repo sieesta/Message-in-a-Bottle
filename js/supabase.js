@@ -1,16 +1,14 @@
 // Supabase configuration
-// Add the Supabase JS client via CDN inside HTML files like so:
-// <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+const SUPABASE_URL = 'https://dqykqsoxympaglnzxzpl.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxeWtxc294eW1wYWdsbnp4enBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NjIxODksImV4cCI6MjA5NTIzODE4OX0.fC4JTKG2TrDjerOjAAU4MLI9zRDWUm6KfrqeUUlZXC8';
 
-/*
-const supabaseUrl = 'YOUR_SUPABASE_URL';
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Initialize Supabase Client
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Example Functions for the App
 
 async function signUpUser(email, password, username) {
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
         options: {
@@ -21,15 +19,20 @@ async function signUpUser(email, password, username) {
 }
 
 async function loginUser(email, password) {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password
     });
     return { data, error };
 }
 
+async function logoutUser() {
+    const { error } = await supabaseClient.auth.signOut();
+    return { error };
+}
+
 async function createBottle(userId, title, message, mood, unlockDate, spotifyUrl) {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('bottles')
         .insert([
             {
@@ -44,4 +47,3 @@ async function createBottle(userId, title, message, mood, unlockDate, spotifyUrl
         ]);
     return { data, error };
 }
-*/
