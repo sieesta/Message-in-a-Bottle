@@ -216,10 +216,19 @@ Past Me
             
             if (bottle && bottle.mood && bottleTints[bottle.mood]) {
                 const glow = document.querySelector('.bottle-glow');
+                const neck = document.querySelector('.bottle-shape');
+                
                 if (glow) {
                     glow.style.background = bottleTints[bottle.mood];
                     // Fade in the colored tint smoothly
                     setTimeout(() => glow.style.opacity = '1', 100);
+                }
+                
+                if (neck) {
+                    neck.style.transition = 'background 2s ease-in-out';
+                    setTimeout(() => {
+                        neck.style.background = bottleTints[bottle.mood];
+                    }, 100);
                 }
             }
             
