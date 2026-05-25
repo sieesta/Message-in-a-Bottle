@@ -28,6 +28,12 @@ CREATE TABLE public.bottles (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+  -- 2b. Migration for existing projects (safe to run multiple times)
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS theme TEXT;
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivery_status TEXT DEFAULT 'pending';
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP WITH TIME ZONE;
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivery_error TEXT;
+
 -- =======================================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- This ensures users can ONLY see and edit their own bottles and profile.

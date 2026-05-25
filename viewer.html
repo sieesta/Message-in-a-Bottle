@@ -241,11 +241,7 @@ Past Me
                     
                     // Mark as opened and delivered in DB if not already
                     if (!bottle.opened) {
-                        supabaseClient.from('bottles').update({
-                            opened: true,
-                            delivery_status: 'delivered',
-                            delivered_at: new Date().toISOString()
-                        }).eq('id', bottle.id).then();
+                        markBottleOpenedAndDelivered(bottle.id).then();
                     }
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));

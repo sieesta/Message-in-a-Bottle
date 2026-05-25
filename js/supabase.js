@@ -32,22 +32,75 @@ async function logoutUser() {
 }
 
 async function createBottle(userId, title, message, mood, themeColor, unlockDate, spotifyUrl) {
-    const { data, error } = await supabaseClient
+    const basePayload = {
+        user_id: userId,
+        title: title,
+        message: message,
+        mood: mood,
+        theme: themeColor,
+        unlock_date: unlockDate,
+        spotify_url: spotifyUrl,
+        opened: false
+    };
+
+    const primaryPayload = {
+        ...basePayload,
+        delivery_status: 'pending'
+    };
+
+    let result = await supabaseClient
         .from('bottles')
-        .insert([
-            {
-                user_id: userId,
-                title: title,
-                message: message,
-                mood: mood,
-                theme: themeColor,
-                unlock_date: unlockDate,
-                spotify_url: spotifyUrl,
-                opened: false,
-                delivery_status: 'pending'
-            }
-        ]);
-    return { data, error };
+        .insert([primaryPayload]);
+
+    if (!result.error) {
+        return result;
+    }
+
+    if (!isMissingColumnError(result.error)) {
+        return result;
+    }
+
+    result = await supabaseClient
+        .from('bottles')
+        .insert([basePayload]);
+
+    return result;
+}
+
+async function markBottleOpenedAndDelivered(bottleId) {
+    let result = await supabaseClient
+        .from('bottles')
+        .update({
+            opened: true,
+            delivery_status: 'delivered',
+            delivered_at: new Date().toISOString()
+        })
+        .eq('id', bottleId);
+
+    if (!result.error) {
+        return result;
+    }
+
+    if (!isMissingColumnError(result.error)) {
+        return result;
+    }
+
+    result = await supabaseClient
+        .from('bottles')
+        .update({ opened: true })
+        .eq('id', bottleId);
+
+    return result;
+}
+
+function isMissingColumnError(error) {
+    if (!error || typeof error.message !== 'string') {
+        return false;
+    }
+
+    return error.message.toLowerCase().includes('could not find the')
+        || error.message.toLowerCase().includes('schema cache')
+        || error.message.toLowerCase().includes('column');
 }
 
 async function getUserBottles(userId) {
