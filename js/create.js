@@ -42,7 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tracks = await searchSpotifyTracks(query);
                 renderSearchResults(tracks);
             } catch (err) {
-                searchResults.innerHTML = '<div style="padding:1rem; color:red; text-align:center;">Spotify Search failed. Deploy the Edge Function.</div>';
+                console.error(err);
+                searchResults.innerHTML = `<div style="padding:1rem; color:red; font-size:0.85rem; text-align:center;">
+                    <b>Spotify Search failed.</b><br/>${err.message}
+                </div>`;
                 searchResults.classList.add('active');
             }
         }, 500); // 500ms debounce
