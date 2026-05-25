@@ -73,24 +73,56 @@
 
 .bottle-icon {
     width: 60px;
-    height: 120px;
+    height: 90px; /* Reduced from 120 so the whole thing fits well */
     background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
-    border-radius: 30px 30px 10px 10px;
-    margin: 0 auto 1.5rem;
+    border-radius: 12px 12px 6px 6px;
+    margin: 30px auto 1.5rem; /* Add top margin for the neck */
     border: 2px solid rgba(255,255,255,0.8);
     position: relative;
 }
 
+/* The Bottle Neck */
+.bottle-shape-mini {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 22px;
+    border: 2px solid rgba(255,255,255,0.8);
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    z-index: -1;
+}
+
+/* The Cork */
 .bottle-icon::before {
     content: '';
     position: absolute;
-    top: -10px;
+    top: -28px;
     left: 50%;
     transform: translateX(-50%);
-    width: 16px;
+    width: 14px;
     height: 12px;
-    background: #d4a373;
-    border-radius: 2px 2px 0 0;
+    background: linear-gradient(90deg, #b88655, #d4a373, #a67544);
+    border-radius: 3px 3px 1px 1px;
+    border: 1px solid rgba(139, 90, 43, 0.6);
+    z-index: -2;
+}
+
+/* The Bottle Rim / Lip */
+.bottle-icon::after {
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 6px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.3));
+    border-radius: 3px;
+    border: 2px solid rgba(255,255,255,0.8);
+    z-index: 1;
 }
 
 .unlock-date {

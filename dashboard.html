@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Message in a Bottle</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/main.css?v=3">
+    <link rel="stylesheet" href="css/dashboard.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="dashboard-page happy-mood">
@@ -45,7 +45,9 @@
             <div class="bottles-grid" id="bottlesGrid">
                 <!-- Bottle templates will be injected via JS -->
                 <div class="bottle-item locked">
-                    <div class="bottle-icon"></div>
+                    <div class="bottle-icon">
+                        <div class="bottle-shape-mini"></div>
+                    </div>
                     <h4>To my future self</h4>
                     <p class="unlock-date">Unlocks: Dec 31, 2026</p>
                     <div class="mood-tag calm">Calm</div>
@@ -57,6 +59,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/main.js"></script>
     <script src="js/supabase.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="js/dashboard.js?v=3"></script>
 </body>
 </html>

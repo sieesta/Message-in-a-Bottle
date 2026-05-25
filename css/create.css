@@ -84,19 +84,19 @@
 }
 
 /* Mood specific bottle previews */
-.preview-bottle.mood-happy {
+.preview-bottle.mood-happy, .preview-bottle.mood-happy .bottle-shape {
     background: linear-gradient(135deg, rgba(255, 183, 3, 0.6), rgba(251, 133, 0, 0.2));
 }
-.preview-bottle.mood-sad {
+.preview-bottle.mood-sad, .preview-bottle.mood-sad .bottle-shape {
     background: linear-gradient(135deg, rgba(0, 53, 102, 0.6), rgba(2, 62, 138, 0.3));
 }
-.preview-bottle.mood-calm {
+.preview-bottle.mood-calm, .preview-bottle.mood-calm .bottle-shape {
     background: linear-gradient(135deg, rgba(142, 202, 230, 0.6), rgba(33, 158, 188, 0.2));
 }
-.preview-bottle.mood-hopeful {
+.preview-bottle.mood-hopeful, .preview-bottle.mood-hopeful .bottle-shape {
     background: linear-gradient(135deg, rgba(233, 236, 239, 0.8), rgba(206, 212, 218, 0.5));
 }
-.preview-bottle.mood-romantic {
+.preview-bottle.mood-romantic, .preview-bottle.mood-romantic .bottle-shape {
     background: linear-gradient(135deg, rgba(255, 175, 204, 0.6), rgba(255, 200, 221, 0.3));
 }
 

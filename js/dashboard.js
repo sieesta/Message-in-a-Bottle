@@ -68,7 +68,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             div.style.cursor = 'pointer';
             
             div.innerHTML = `
-                <div class="bottle-icon" style="background: ${getMoodGradient(bottle.mood)}; ${isUnlocked ? 'box-shadow: 0 0 20px ' + getMoodGradient(bottle.mood) : ''}"></div>
+                <div class="bottle-icon" style="background: ${getMoodGradient(bottle.mood)}; ${isUnlocked ? 'box-shadow: 0 0 20px ' + getMoodGradient(bottle.mood) : ''}">
+                    <div class="bottle-shape-mini" style="background: ${getMoodGradient(bottle.mood)};"></div>
+                </div>
                 <h4>${bottle.title}</h4>
                 <p class="unlock-date" style="color: ${isUnlocked ? '#2a9d8f' : ''}">
                     ${isUnlocked ? 'Ready to Open!' : 'Unlocks: ' + localeDate}
