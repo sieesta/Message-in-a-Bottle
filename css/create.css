@@ -73,7 +73,7 @@
     flex-direction: column;
     align-items: center;
     position: sticky;
-    top: 120px;
+    top: 180px;
     opacity: 0;
     animation: slideUp 0.8s ease 0.3s forwards;
 }
