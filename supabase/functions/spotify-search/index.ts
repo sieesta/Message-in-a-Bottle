@@ -37,7 +37,13 @@ serve(async (req) => {
       body: 'grant_type=client_credentials'
     })
 
-    const tokenData = await tokenResponse.json()
+    const tokenResponseText = await tokenResponse.text()
+    let tokenData;
+    try {
+        tokenData = JSON.parse(tokenResponseText);
+    } catch (e) {
+        throw new Error(`Spotify Token API returned non-JSON: ${tokenResponseText.substring(0, 100)}`);
+    }
     
     if (!tokenData.access_token) {
         throw new Error('Failed to login to Spotify from backend')
@@ -50,7 +56,13 @@ serve(async (req) => {
       }
     })
 
-    const searchData = await searchResponse.json()
+    const searchResponseText = await searchResponse.text()
+    let searchData;
+    try {
+        searchData = JSON.parse(searchResponseText);
+    } catch (e) {
+        throw new Error(`Spotify Search API returned non-JSON: ${searchResponseText.substring(0, 100)}`);
+    }
 
     // 6. Send the search results back to our frontend!
     return new Response(JSON.stringify(searchData), {
