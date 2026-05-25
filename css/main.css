@@ -238,3 +238,36 @@ p {
     from { transform: translateY(0) translateX(0); opacity: 1; }
     to { transform: translateY(-100vh) translateX(50px); opacity: 0; }
 }
+
+@media (max-width: 768px) {
+    .glass-nav {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.5rem;
+    }
+    
+    .logo {
+        font-size: 1.2rem;
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .btn-primary, .btn-ghost {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .landing-page .hero {
+        flex-direction: column;
+        padding-top: 120px;
+        text-align: center;
+        gap: 3rem;
+    }
+}
