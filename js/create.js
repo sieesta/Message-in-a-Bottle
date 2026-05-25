@@ -1,7 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const timeInput = document.getElementById('unlockDate');
     const moodSelect = document.getElementById('moodSelect');
+    const customMoodGroup = document.getElementById('customMoodGroup');
+    const customMoodInput = document.getElementById('customMood');
+    const moodColorInput = document.getElementById('moodColor');
     const previewBottle = document.querySelector('.preview-bottle');
+    const previewBottleShape = previewBottle ? previewBottle.querySelector('.bottle-shape') : null;
+    const previewBottleGlow = previewBottle ? previewBottle.querySelector('.bottle-glow') : null;
     const form = document.getElementById('createBottleForm');
     
     // Spotify Search UI Elements
@@ -15,49 +20,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     timeInput.min = today.toISOString().split('T')[0];
 
-    // Mood preview logic
-    moodSelect.addEventListener('change', (e) => {
-        const mood = e.target.value;
-        const moodClasses = ['mood-happy', 'mood-calm', 'mood-sad', 'mood-hopeful', 'mood-romantic'];
-        
-        previewBottle.classList.remove(...moodClasses);
-        previewBottle.classList.add(`mood-${mood}`);
-    });
+    function updatePreviewBottle() {
+        if (!previewBottle) {
+            return;
+        }
+
+        const selectedMood = moodSelect.value;
+        const customMood = customMoodInput ? customMoodInput.value.trim() : '';
+        const moodColor = moodColorInput && moodColorInput.value ? moodColorInput.value : getPresetMoodColor(selectedMood);
+        const bottleGradient = buildBottleGradient(moodColor, 0.65, 0.18);
+
+        previewBottle.style.background = bottleGradient;
+
+        if (previewBottleShape) {
+            previewBottleShape.style.background = bottleGradient;
+        }
+
+        if (previewBottleGlow) {
+            previewBottleGlow.style.background = buildBottleGradient(moodColor, 0.45, 0.08);
+            previewBottleGlow.style.opacity = '1';
+        }
+
+        previewBottle.dataset.moodLabel = selectedMood === 'custom' ? (customMood || 'Custom mood') : getMoodLabel(selectedMood);
+    }
+
+    function syncMoodInputs() {
+        const isCustomMood = moodSelect.value === 'custom';
+
+        if (customMoodGroup) {
+            customMoodGroup.style.display = isCustomMood ? 'block' : 'none';
+        }
+
+        if (customMoodInput) {
+            customMoodInput.required = isCustomMood;
+        }
+
+        updatePreviewBottle();
+    }
+
+    moodSelect.addEventListener('change', syncMoodInputs);
+    if (customMoodInput) {
+        customMoodInput.addEventListener('input', updatePreviewBottle);
+    }
+    if (moodColorInput) {
+        moodColorInput.addEventListener('input', updatePreviewBottle);
+    }
+    syncMoodInputs();
 
     // Spotify Integration Logic
     let searchTimeout;
-    
-    // Default recommendations when clicking empty search box (Using iTunes structure)
-    const recommendedTracks = [
-        { trackName: 'The One That Got Away', artistName: 'Katy Perry', artworkUrl100: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/91/9f/c6/919fc6d4-d343-4ccb-ed89-8dcb7cc203c9/00602527810486.rgb.jpg/100x100bb.jpg', previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/bf/82/ee/bf82eebe-86eb-6f46-f947-f37fa9b360ae/mzaf_10332822557551066761.plus.aac.p.m4a' },
-        { trackName: 'Perfect', artistName: 'Ed Sheeran', artworkUrl100: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1b/27/e6/1b27e69a-6c1e-f3a7-e9a6-ed99b0c7cf72/190295851286.jpg/100x100bb.jpg', previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/da/51/9d/da519dd1-eeb9-bcad-f55a-e666a7b7a5a8/mzaf_4070001004117765660.plus.aac.p.m4a' },
-        { trackName: 'Lover', artistName: 'Taylor Swift', artworkUrl100: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4e/c9/2a/4ec92a4e-bf2e-f4aa-0d26-cc7b19280cd6/00732053916246.rgb.jpg/100x100bb.jpg', previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/8e/3c/d4/8e3cd41d-d246-86dc-4418-ca04c0ecda73/mzaf_6764506308697380121.plus.aac.p.m4a' },
-        { trackName: 'A Thousand Years', artistName: 'Christina Perri', artworkUrl100: 'https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/11/49/b7/1149b71e-dc0f-8cfa-ed89-8d18b2cba726/075679967167.jpg/100x100bb.jpg', previewUrl: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/80/75/a6/8075a687-ccbb-7d84-c4a0-53bc1be19e78/mzaf_8407421151613045353.plus.aac.p.m4a' }
-    ];
-
-    // Show recommendations when input gets clicked/focused
-    searchInput.addEventListener('focus', () => {
-        if (!searchInput.value.trim()) {
-            renderSearchResults(recommendedTracks);
-        } else {
-            searchResults.classList.add('active');
-        }
-    });
     
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value;
         clearTimeout(searchTimeout);
         
         if (!query.trim()) {
-            // Revert back to defaults if input is cleared
-            renderSearchResults(recommendedTracks);
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('active');
             return;
-        }
-
-        // Instant visual filter for recommendations while they keep typing
-        const filtered = recommendedTracks.filter(t => t.trackName.toLowerCase().includes(query.toLowerCase()));
-        if (filtered.length > 0) {
-            renderSearchResults(filtered);
         }
 
         searchTimeout = setTimeout(async () => {
@@ -159,8 +179,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const title = document.getElementById('bottleTitle').value;
             const message = document.getElementById('bottleMessage').value;
             const unlockDate = document.getElementById('unlockDate').value;
-            const mood = document.getElementById('moodSelect').value;
-            const musicData = hidTrackUrl.value; // Our packed JSON string from Apple Music
+            const selectedMood = moodSelect.value;
+            const customMood = customMoodInput ? customMoodInput.value.trim() : '';
+            const mood = selectedMood === 'custom' ? customMood : selectedMood;
+            const moodColor = moodColorInput && moodColorInput.value ? moodColorInput.value : getPresetMoodColor(selectedMood);
+            const musicData = hidTrackUrl.value;
+
+            if (selectedMood === 'custom' && !mood) {
+                alert('Please write your actual mood before sealing the bottle.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Seal this Bottle';
+                return;
+            }
             
             // Insert into Supabase using the helper function
             const { data, error } = await createBottle(
@@ -168,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 title,
                 message,
                 mood,
+                moodColor,
                 unlockDate,
                 musicData
             );

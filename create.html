@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Bottle | Message in a Bottle</title>
-    <link rel="stylesheet" href="css/main.css?v=4">
-    <link rel="stylesheet" href="css/create.css?v=4">
+    <link rel="stylesheet" href="css/main.css?v=5">
+    <link rel="stylesheet" href="css/create.css?v=5">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="create-page">
@@ -41,13 +41,24 @@
                             <option value="sad">Sad/Melancholic</option>
                             <option value="hopeful">Hopeful</option>
                             <option value="romantic">Romantic</option>
+                            <option value="custom">Custom mood</option>
                         </select>
                     </div>
                     
                     <div class="form-group half">
-                        <label for="unlockDate">Unlock Date</label>
-                        <input type="date" id="unlockDate" required>
+                        <label for="moodColor">Mood Color</label>
+                        <input type="color" id="moodColor" value="#8ecae6" aria-label="Mood color">
                     </div>
+                </div>
+
+                <div class="form-group" id="customMoodGroup" style="display:none;">
+                    <label for="customMood">Your actual mood</label>
+                    <input type="text" id="customMood" placeholder="Write the mood you actually feel...">
+                </div>
+
+                <div class="form-group">
+                    <label for="unlockDate">Unlock Date</label>
+                        <input type="date" id="unlockDate" required>
                 </div>
 
                 <div class="form-group">

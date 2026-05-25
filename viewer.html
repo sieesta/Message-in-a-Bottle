@@ -200,35 +200,27 @@ Past Me
                 return;
             }
             
-            const bgColors = {
-                happy: 'linear-gradient(135deg, #ffb703 0%, #fb8500 100%)',
-                sad: 'linear-gradient(135deg, #003566 0%, #023e8a 100%)',
-                calm: 'linear-gradient(135deg, #8ecae6 0%, #219ebc 100%)',
-                hopeful: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-                romantic: 'linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%)'
-            };
-            
-            const bottleTints = {
-                happy: 'linear-gradient(135deg, rgba(255, 183, 3, 0.5) 0%, rgba(251, 133, 0, 0.5) 100%)',
-                sad: 'linear-gradient(135deg, rgba(0, 53, 102, 0.5) 0%, rgba(2, 62, 138, 0.5) 100%)',
-                calm: 'linear-gradient(135deg, rgba(142, 202, 230, 0.5) 0%, rgba(33, 158, 188, 0.5) 100%)',
-                hopeful: 'linear-gradient(135deg, rgba(168, 237, 234, 0.5) 0%, rgba(254, 214, 227, 0.5) 100%)',
-                romantic: 'linear-gradient(135deg, rgba(255, 175, 204, 0.5) 0%, rgba(255, 200, 221, 0.5) 100%)'
-            };
-            
-            if (bottle && bottle.mood && bottleTints[bottle.mood]) {
+            const moodColor = bottle.theme || getPresetMoodColor(bottle.mood);
+            const bottleGradient = buildBottleGradient(moodColor, 0.58, 0.16);
+            const pageGradient = buildMoodPageGradient(moodColor);
+
+            if (bottle && moodColor) {
                 const glow = document.querySelector('.bottle-glow');
                 const neckGlow = document.querySelector('.bottle-neck-glow');
-                
+                const neck = document.querySelector('.bottle-shape');
+
                 if (glow) {
-                    glow.style.background = bottleTints[bottle.mood];
-                    // Fade in the colored tint smoothly
+                    glow.style.background = bottleGradient;
                     setTimeout(() => glow.style.opacity = '1', 100);
                 }
-                
+
                 if (neckGlow) {
-                    neckGlow.style.background = bottleTints[bottle.mood];
+                    neckGlow.style.background = bottleGradient;
                     setTimeout(() => neckGlow.style.opacity = '1', 100);
+                }
+
+                if (neck) {
+                    neck.style.background = bottleGradient;
                 }
             }
             
@@ -247,9 +239,13 @@ Past Me
                     countdownEl.innerHTML = "The time has come.";
                     openBtn.style.display = 'inline-block';
                     
-                    // Mark as opened in DB if not already
+                    // Mark as opened and delivered in DB if not already
                     if (!bottle.opened) {
-                        supabaseClient.from('bottles').update({ opened: true }).eq('id', bottle.id).then();
+                        supabaseClient.from('bottles').update({
+                            opened: true,
+                            delivery_status: 'delivered',
+                            delivered_at: new Date().toISOString()
+                        }).eq('id', bottle.id).then();
                     }
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -303,14 +299,14 @@ Past Me
                     unlockedState.classList.add('revealed');
                     
                     // Change background to reflect mood so bubbles remain visible against color
-                    if (bottle && bottle.mood && bgColors[bottle.mood]) {
+                    if (bottle && moodColor) {
                         const moodBg = document.getElementById('moodBg');
                         if (moodBg) {
-                            moodBg.style.background = bgColors[bottle.mood];
+                            moodBg.style.background = pageGradient;
                             // Request a tiny delay so the background renders before fading in
                             setTimeout(() => moodBg.style.opacity = '1', 50);
                         } else {
-                            document.body.style.background = bgColors[bottle.mood];
+                            document.body.style.background = pageGradient;
                         }
                     }
                 }, 1600); // 1.6 second animation wait time

@@ -19,9 +19,12 @@ CREATE TABLE public.bottles (
     message TEXT NOT NULL,
     mood TEXT NOT NULL,
     unlock_date DATE NOT NULL,
-    theme TEXT,
+    theme TEXT, -- Stores the chosen mood color
     spotify_url TEXT,
     opened BOOLEAN DEFAULT false,
+    delivery_status TEXT DEFAULT 'pending',
+    delivered_at TIMESTAMP WITH TIME ZONE,
+    delivery_error TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

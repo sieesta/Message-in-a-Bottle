@@ -54,13 +54,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             moodCounts[bottle.mood] = (moodCounts[bottle.mood] || 0) + 1;
             if (moodCounts[bottle.mood] > maxMoodCount) {
                 maxMoodCount = moodCounts[bottle.mood];
-                dominantMood = bottle.mood.charAt(0).toUpperCase() + bottle.mood.slice(1);
+                dominantMood = getMoodLabel(bottle.mood);
             }
             
             // Inject dynamic HTML
             const localeDate = unlockDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
             const isUnlocked = unlockDate <= now;
             
+            const moodColor = bottle.theme || getPresetMoodColor(bottle.mood);
+            const moodGradient = buildBottleGradient(moodColor, 0.6, 0.2);
+            const glowColor = hexToRgba(moodColor, 0.35);
+
             const div = document.createElement('div');
             // Remove 'locked' class if it's already unlockable
             div.className = `bottle-item ${isUnlocked ? '' : 'locked'}`;
@@ -68,14 +72,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             div.style.cursor = 'pointer';
             
             div.innerHTML = `
-                <div class="bottle-icon" style="background: ${getMoodGradient(bottle.mood)}; ${isUnlocked ? 'box-shadow: 0 0 20px ' + getMoodGradient(bottle.mood) : ''}">
-                    <div class="bottle-shape-mini" style="background: ${getMoodGradient(bottle.mood)};"></div>
+                <div class="bottle-icon" style="background: ${moodGradient}; ${isUnlocked ? 'box-shadow: 0 0 20px ' + glowColor + ';' : ''}">
+                    <div class="bottle-shape-mini" style="background: ${moodGradient};"></div>
                 </div>
                 <h4>${bottle.title}</h4>
                 <p class="unlock-date" style="color: ${isUnlocked ? '#2a9d8f' : ''}">
                     ${isUnlocked ? 'Ready to Open!' : 'Unlocks: ' + localeDate}
                 </p>
-                <div class="mood-tag ${bottle.mood}">${bottle.mood.charAt(0).toUpperCase() + bottle.mood.slice(1)}</div>
+                <div class="mood-tag ${bottle.mood}">${getMoodLabel(bottle.mood)}</div>
             `;
             
             // Navigate to viewer!
@@ -98,13 +102,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function getMoodGradient(mood) {
-    switch(mood) {
-        case 'happy': return 'linear-gradient(135deg, rgba(255, 183, 3, 0.6), rgba(251, 133, 0, 0.2))';
-        case 'sad': return 'linear-gradient(135deg, rgba(0, 53, 102, 0.6), rgba(2, 62, 138, 0.3))';
-        case 'calm': return 'linear-gradient(135deg, rgba(142, 202, 230, 0.6), rgba(33, 158, 188, 0.2))';
-        case 'hopeful': return 'linear-gradient(135deg, rgba(233, 236, 239, 0.8), rgba(206, 212, 218, 0.5))';
-        case 'romantic': return 'linear-gradient(135deg, rgba(255, 175, 204, 0.6), rgba(255, 200, 221, 0.3))';
-        default: return 'linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2))';
-    }
-}

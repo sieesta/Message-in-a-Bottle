@@ -36,3 +36,67 @@ function createParticles(count) {
         container.appendChild(particle);
     }
 }
+
+function getPresetMoodColor(mood) {
+    switch (mood) {
+        case 'happy':
+            return '#fb8500';
+        case 'sad':
+            return '#023e8a';
+        case 'calm':
+            return '#219ebc';
+        case 'hopeful':
+            return '#b8d8d8';
+        case 'romantic':
+            return '#ffafcc';
+        default:
+            return '#8ecae6';
+    }
+}
+
+function normalizeHexColor(color) {
+    if (!color || typeof color !== 'string') {
+        return null;
+    }
+
+    const trimmed = color.trim();
+    if (/^#[0-9a-fA-F]{3}$/.test(trimmed) || /^#[0-9a-fA-F]{6}$/.test(trimmed)) {
+        return trimmed;
+    }
+
+    return null;
+}
+
+function hexToRgba(color, alpha) {
+    const normalized = normalizeHexColor(color);
+    if (!normalized) {
+        return `rgba(255, 255, 255, ${alpha})`;
+    }
+
+    const hex = normalized.slice(1);
+    const fullHex = hex.length === 3
+        ? hex.split('').map(char => char + char).join('')
+        : hex;
+    const value = parseInt(fullHex, 16);
+    const red = (value >> 16) & 255;
+    const green = (value >> 8) & 255;
+    const blue = value & 255;
+
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function buildBottleGradient(color, startAlpha = 0.6, endAlpha = 0.2) {
+    return `linear-gradient(135deg, ${hexToRgba(color, startAlpha)} 0%, ${hexToRgba(color, endAlpha)} 100%)`;
+}
+
+function buildMoodPageGradient(color) {
+    return `linear-gradient(135deg, ${hexToRgba(color, 0.95)} 0%, ${hexToRgba(color, 0.55)} 100%)`;
+}
+
+function getMoodLabel(mood) {
+    if (!mood) {
+        return 'Mood';
+    }
+
+    return mood.charAt(0).toUpperCase() + mood.slice(1);
+}

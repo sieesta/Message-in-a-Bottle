@@ -31,7 +31,7 @@ async function logoutUser() {
     return { error };
 }
 
-async function createBottle(userId, title, message, mood, unlockDate, spotifyUrl) {
+async function createBottle(userId, title, message, mood, themeColor, unlockDate, spotifyUrl) {
     const { data, error } = await supabaseClient
         .from('bottles')
         .insert([
@@ -40,9 +40,11 @@ async function createBottle(userId, title, message, mood, unlockDate, spotifyUrl
                 title: title,
                 message: message,
                 mood: mood,
+                theme: themeColor,
                 unlock_date: unlockDate,
                 spotify_url: spotifyUrl,
-                opened: false
+                opened: false,
+                delivery_status: 'pending'
             }
         ]);
     return { data, error };

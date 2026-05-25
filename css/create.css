@@ -51,6 +51,26 @@
     resize: vertical;
 }
 
+.form-group input[type="color"] {
+    padding: 0.35rem;
+    height: 56px;
+    cursor: pointer;
+}
+
+#customMoodGroup {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#customMoodGroup[style*="display:none"] {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+#customMoodGroup:not([style*="display:none"]) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .form-group input:focus, 
 .form-group textarea:focus,
 .form-group select:focus {
@@ -81,6 +101,7 @@
 .preview-bottle {
     transform: scale(1.2);
     margin-top: 2rem;
+    transition: background 0.5s ease, box-shadow 0.5s ease, transform 0.3s ease;
 }
 
 /* Mood specific bottle previews */
