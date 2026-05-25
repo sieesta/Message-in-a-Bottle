@@ -96,14 +96,14 @@
     <main class="viewer-container">
         
         <div class="bottle-presentation" id="lockedState">
-            <div class="floating-bottle" style="transform: scale(1.5); margin: 3rem auto;">
+            <div class="floating-bottle" style="transform: scale(1.7); margin: 3rem auto; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; box-sizing: border-box; text-align: center;">
                 <div class="bottle-glow"></div>
                 <div class="bottle-shape"></div>
+                
+                <h2 style="position: relative; z-index: 10; font-size: 1.3rem; margin-top: 1rem; color: #333; text-shadow: 0 0 10px rgba(255,255,255,0.8);">This memory<br>is sealed.</h2>
+                <div id="countdown" style="position: relative; z-index: 10; font-size: 1.2rem; font-weight: 800; margin: 1.5rem 0; color: #d90429; text-shadow: 0 0 10px rgba(255,255,255,0.9);">Unlocking soon...</div>
+                <button id="openBtn" class="btn-primary" style="position: relative; z-index: 10; display:none; margin-top:0.5rem; padding: 0.6rem 1.2rem; font-size: 0.85rem; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">Break the Seal</button>
             </div>
-            
-            <h2 style="margin-top:2rem;">This memory is sealed.</h2>
-            <div id="countdown">Unlocking soon...</div>
-            <button id="openBtn" class="btn-primary" style="display:none; margin-top:1rem;">Break the Seal</button>
         </div>
 
         <div class="glass-card bottle-message-card" id="unlockedState">
