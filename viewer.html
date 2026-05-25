@@ -11,7 +11,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 8rem 2rem 2rem 2rem; /* Added top padding so it isn't blocked by the sticky nav */
             flex-direction: column;
         }
 
@@ -204,8 +204,18 @@ Past Me
                 
                 unlockedState.classList.add('revealed');
                 
-                // Change background to reflect mood
-                document.body.style.background = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
+                // Change background to reflect mood so bubbles remain visible against color
+                const bgColors = {
+                    happy: 'linear-gradient(135deg, #ffb703 0%, #fb8500 100%)',
+                    sad: 'linear-gradient(135deg, #003566 0%, #023e8a 100%)',
+                    calm: 'linear-gradient(135deg, #8ecae6 0%, #219ebc 100%)',
+                    hopeful: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                    romantic: 'linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%)'
+                };
+                
+                if (bottle && bottle.mood && bgColors[bottle.mood]) {
+                    document.body.style.background = bgColors[bottle.mood];
+                }
             });
         });
     </script>
