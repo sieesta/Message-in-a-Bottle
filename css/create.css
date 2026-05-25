@@ -85,13 +85,19 @@
 
 /* Mood specific bottle previews */
 .preview-bottle.mood-happy {
-    background: linear-gradient(135deg, rgba(255, 183, 3, 0.4), rgba(251, 133, 0, 0.2));
+    background: linear-gradient(135deg, rgba(255, 183, 3, 0.6), rgba(251, 133, 0, 0.2));
 }
 .preview-bottle.mood-sad {
-    background: linear-gradient(135deg, rgba(0, 53, 102, 0.4), rgba(2, 62, 138, 0.3));
+    background: linear-gradient(135deg, rgba(0, 53, 102, 0.6), rgba(2, 62, 138, 0.3));
 }
 .preview-bottle.mood-calm {
-    background: linear-gradient(135deg, rgba(142, 202, 230, 0.5), rgba(33, 158, 188, 0.2));
+    background: linear-gradient(135deg, rgba(142, 202, 230, 0.6), rgba(33, 158, 188, 0.2));
+}
+.preview-bottle.mood-hopeful {
+    background: linear-gradient(135deg, rgba(233, 236, 239, 0.8), rgba(206, 212, 218, 0.5));
+}
+.preview-bottle.mood-romantic {
+    background: linear-gradient(135deg, rgba(255, 175, 204, 0.6), rgba(255, 200, 221, 0.3));
 }
 
 @media (max-width: 768px) {
