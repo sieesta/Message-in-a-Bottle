@@ -156,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            const title = document.getElementById('title').value;
-            const message = document.getElementById('message').value;
+            const title = document.getElementById('bottleTitle').value;
+            const message = document.getElementById('bottleMessage').value;
             const unlockDate = document.getElementById('unlockDate').value;
             const mood = document.getElementById('moodSelect').value;
             const musicData = hidTrackUrl.value; // Our packed JSON string from Apple Music
