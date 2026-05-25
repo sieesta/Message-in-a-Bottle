@@ -141,15 +141,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Form submission
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Example check
-        console.log("Attached Song URL:", hidTrackUrl.value);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sealing...';
         
-        // Supabase DB insert logic would go here
-        
-        alert('Your message has been sealed and thrown into the sea of time.');
-        window.location.href = 'dashboard.html';
+        try {
+            // Check if user is logged in
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                alert("You must be logged in to seal a bottle.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+            const unlockDate = document.getElementById('unlockDate').value;
+            const mood = document.getElementById('moodSelect').value;
+            const musicData = hidTrackUrl.value; // Our packed JSON string from Apple Music
+            
+            // Insert into Supabase using the helper function
+            const { data, error } = await createBottle(
+                session.user.id,
+                title,
+                message,
+                mood,
+                unlockDate,
+                musicData
+            );
+
+            if (error) {
+                throw error;
+            }
+            
+            alert('Your message has been sealed and thrown into the sea of time.');
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            console.error("Error creating bottle:", error);
+            alert("Failed to seal the bottle. " + error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Seal the Memory';
+        }
     });
 });
