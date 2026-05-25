@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Message in a Bottle</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page happy-mood">
+    <div class="particles-container" id="particles"></div>
+    
+    <nav class="glass-nav">
+        <div class="logo">Message in a Bottle</div>
+        <div class="nav-links">
+            <a href="create.html" class="btn-primary">Create Bottle</a>
+            <button id="logoutBtn" class="btn-ghost">Logout</button>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <h1 id="welcomeMessage">Welcome back, Dreamer.</h1>
+            <p>Your emotional timeline awaits.</p>
+        </header>
+
+        <section class="stats-grid">
+            <div class="glass-card stat-card">
+                <h3>Total Bottles</h3>
+                <div class="stat-value" id="totalBottles">3</div>
+            </div>
+            <div class="glass-card stat-card">
+                <h3>Upcoming Unlocks</h3>
+                <div class="stat-value" id="upcomingUnlocks">1</div>
+            </div>
+            <div class="glass-card stat-card">
+                <h3>Dominant Mood</h3>
+                <div class="stat-value" id="dominantMood">Calm</div>
+            </div>
+        </section>
+
+        <section class="recent-bottles glass-card">
+            <h2>Your Sea of Memories</h2>
+            <div class="bottles-grid" id="bottlesGrid">
+                <!-- Bottle templates will be injected via JS -->
+                <div class="bottle-item locked">
+                    <div class="bottle-icon"></div>
+                    <h4>To my future self</h4>
+                    <p class="unlock-date">Unlocks: Dec 31, 2026</p>
+                    <div class="mood-tag calm">Calm</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

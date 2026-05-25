@@ -1,0 +1,224 @@
+.create-container {
+    padding: 100px 5% 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+}
+
+.create-form-wrapper {
+    flex: 2;
+    animation: slideUp 0.8s ease forwards;
+}
+
+.create-form-wrapper h2 {
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input, 
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.3);
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus,
+.form-group select:focus {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+.seal-btn {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: linear-gradient(45deg, rgba(255,255,255,0.8), rgba(255,255,255,1));
+}
+
+.preview-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: sticky;
+    top: 120px;
+    opacity: 0;
+    animation: slideUp 0.8s ease 0.3s forwards;
+}
+
+.preview-bottle {
+    transform: scale(1.2);
+    margin-top: 2rem;
+}
+
+/* Mood specific bottle previews */
+.preview-bottle.mood-happy {
+    background: linear-gradient(135deg, rgba(255, 183, 3, 0.4), rgba(251, 133, 0, 0.2));
+}
+.preview-bottle.mood-sad {
+    background: linear-gradient(135deg, rgba(0, 53, 102, 0.4), rgba(2, 62, 138, 0.3));
+}
+.preview-bottle.mood-calm {
+    background: linear-gradient(135deg, rgba(142, 202, 230, 0.5), rgba(33, 158, 188, 0.2));
+}
+
+@media (max-width: 768px) {
+    .create-container {
+        flex-direction: column-reverse;
+    }
+    .preview-container {
+        position: static;
+        width: 100%;
+    }
+}
+/* Spotify Search Styles */
+.spotify-search-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.spotify-search-results {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    display: none;
+    backdrop-filter: blur(10px);
+}
+
+.spotify-search-results.active {
+    display: block;
+}
+
+.song-result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.song-result-item:last-child {
+    border-bottom: none;
+}
+
+.song-result-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.song-result-item img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.song-result-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-result-info strong {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    margin-bottom: 0.2rem;
+}
+
+.song-result-info span {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.selected-song-display {
+    display: none;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.selected-song-display.active {
+    display: flex;
+}
+
+.selected-song-display img {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.selected-song-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.selected-song-info strong {
+    font-size: 0.95rem;
+}
+
+.selected-song-info span {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+#removeSongBtn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    color: var(--text-light);
+}
+
+#removeSongBtn:hover {
+    background: rgba(0,0,0,0.1);
+    color: var(--text-main);
+}
+

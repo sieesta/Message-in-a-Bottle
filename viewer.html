@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bottle | Message in a Bottle</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .viewer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            flex-direction: column;
+        }
+
+        .bottle-presentation {
+            text-align: center;
+            animation: fadeIn 1.5s ease;
+        }
+
+        .bottle-message-card {
+            max-width: 600px;
+            width: 100%;
+            margin-top: 2rem;
+            display: none; /* Hidden until unlocked */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .bottle-message-card.revealed {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bottle-message-card h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .message-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-style: italic;
+            white-space: pre-wrap;
+        }
+
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 1.5rem 0;
+            letter-spacing: 2px;
+        }
+
+        .spotify-container {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="viewer-page">
+    <div class="particles-container" id="particles"></div>
+    
+    <nav class="glass-nav">
+        <a href="dashboard.html" class="logo" style="text-decoration:none; color:inherit;">Message in a Bottle</a>
+        <div class="nav-links">
+            <a href="dashboard.html" class="btn-ghost">Back to Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="viewer-container">
+        
+        <div class="bottle-presentation" id="lockedState">
+            <div class="floating-bottle" style="transform: scale(1.5); margin: 3rem auto;">
+                <div class="bottle-glow"></div>
+                <div class="bottle-shape"></div>
+            </div>
+            
+            <h2 style="margin-top:2rem;">This memory is sealed.</h2>
+            <div id="countdown">Unlocking soon...</div>
+            <button id="openBtn" class="btn-primary" style="display:none; margin-top:1rem;">Break the Seal</button>
+        </div>
+
+        <div class="glass-card bottle-message-card" id="unlockedState">
+            <h2 id="viewTitle">My 30th Birthday</h2>
+            <p class="message-content" id="viewMessage">
+Dear future me,
+
+I hope you're doing well. Remember when you built this app in 2024? Keep shining, and keep preserving your memories.
+
+With love,
+Past Me
+            </p>
+            
+            <div class="spotify-container" id="spotifyPlayer">
+                <!-- Spotify embed injected here -->
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/main.js"></script>
+    <script src="js/spotify.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lockedState = document.getElementById('lockedState');
+            const unlockedState = document.getElementById('unlockedState');
+            const openBtn = document.getElementById('openBtn');
+            const spotifyPlayer = document.getElementById('spotifyPlayer');
+            
+            // Example data (In a real app, fetched from Supabase)
+            const unlockDate = new Date();
+            unlockDate.setSeconds(unlockDate.getSeconds() + 5); // Unlocks in 5 seconds for demo
+            
+            const spotifyLink = 'https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp'; // Example link
+            
+            const countdownEl = document.getElementById('countdown');
+            
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = unlockDate.getTime() - now;
+                
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownEl.innerHTML = "The time has come.";
+                    openBtn.style.display = 'inline-block';
+                } else {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }
+            }, 1000);
+            
+            openBtn.addEventListener('click', () => {
+                lockedState.style.display = 'none';
+                
+                // Add Spotify embed
+                if(spotifyLink) {
+                    spotifyPlayer.innerHTML = getSpotifyEmbedIframe(spotifyLink);
+                }
+                
+                unlockedState.classList.add('revealed');
+                
+                // Change background to reflect mood
+                document.body.style.background = 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)';
+            });
+        });
+    </script>
+</body>
+</html>
