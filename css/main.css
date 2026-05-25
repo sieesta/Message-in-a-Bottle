@@ -151,27 +151,64 @@ p {
 
 .floating-bottle {
     width: 200px;
-    height: 400px;
+    height: 320px;
     background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
-    border-radius: 100px 100px 40px 40px;
+    border-radius: 40px 40px 30px 30px;
     border: 2px solid rgba(255,255,255,0.6);
     position: relative;
     animation: float 6s ease-in-out infinite;
     backdrop-filter: blur(5px);
     box-shadow: inset 0 0 20px rgba(255,255,255,0.5), 0 15px 35px rgba(0,0,0,0.1);
+    margin-top: 60px; /* Make room for the neck */
 }
 
+/* The Bottle Neck */
+.bottle-shape {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 65px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    border: 2px solid rgba(255,255,255,0.6);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    backdrop-filter: blur(5px);
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.5);
+    z-index: -1;
+}
+
+/* The Cork */
 .floating-bottle::before {
     content: '';
     position: absolute;
-    top: -30px;
+    top: -85px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    background: #d4a373; /* Cork color */
-    border-radius: 5px 5px 0 0;
-    border: 2px solid rgba(139, 90, 43, 0.5);
+    width: 44px;
+    height: 35px;
+    background: linear-gradient(90deg, #b88655, #d4a373, #a67544);
+    border-radius: 8px 8px 3px 3px;
+    border: 2px solid rgba(139, 90, 43, 0.6);
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.1);
+    z-index: -2;
+}
+
+/* The Bottle Rim / Lip */
+.floating-bottle::after {
+    content: '';
+    position: absolute;
+    top: -65px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75px;
+    height: 18px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.3));
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.8);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1;
 }
 
 @keyframes float {
