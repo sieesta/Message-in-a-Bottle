@@ -107,3 +107,37 @@
     font-weight: 600;
     background: rgba(255,255,255,0.5);
 }
+
+/* Mobile swipeable carousel for bottles */
+@media (max-width: 768px) {
+    .bottles-grid {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1rem;
+        padding-bottom: 2rem;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        /* Padding left/right so the first and last items don't stick to the absolute edge */
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .bottle-item {
+        flex: 0 0 calc(85% - 1rem); /* Large width to focus on one card, leaving a tiny peek of the next card */
+        scroll-snap-align: center;
+    }
+
+    /* Style the scrollbar to be elegant and subtle */
+    .bottles-grid::-webkit-scrollbar {
+        height: 5px;
+    }
+    .bottles-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    .bottles-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+    }
+}
