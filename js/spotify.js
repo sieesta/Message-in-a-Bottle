@@ -3,22 +3,11 @@
 // We removed the Client ID and Secret from here because it's public!
 // Instead, we will call our secure Supabase Edge Function to do it for us.
 
-const SUPABASE_APP_URL = 'YOUR_SUPABASE_URL'; // i.e. https://xyz.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_APP_URL = 'https://dqykqsoxympaglnzxzpl.supabase.co'; // i.e. https://xyz.supabase.co
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRxeWtxc294eW1wYWdsbnp4enBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NjIxODksImV4cCI6MjA5NTIzODE4OX0.fC4JTKG2TrDjerOjAAU4MLI9zRDWUm6KfrqeUUlZXC8';
 
 async function searchSpotifyTracks(query) {
     if (!query) return [];
-    
-    // Use Mock Data if you haven't linked Supabase yet (for demo purposes)
-    if (SUPABASE_APP_URL === 'YOUR_SUPABASE_URL') {
-        const mockDb = [
-            { id: '75JFxkI2RXiU7L9VXzMkle', name: 'The One That Got Away', artists: [{name: 'Katy Perry'}], album: {images: [{url: 'https://i.scdn.co/image/ab67616d000048518aeda0abde1914eb13df420a'}, {url: 'https://i.scdn.co/image/ab67616d000048518aeda0abde1914eb13df420a'}]} },
-            { id: '1', name: 'You Are the Right One', artists: [{name: 'Sports'}], album: {images: [{url: 'https://via.placeholder.com/50'}, {url: 'https://via.placeholder.com/50'}]} },
-            { id: '2', name: 'Your Song', artists: [{name: 'Parokya Ni Edgar'}], album: {images: [{url: 'https://via.placeholder.com/50'}, {url: 'https://via.placeholder.com/50'}]} },
-            { id: '3', name: 'Here, There And Everywhere - 2022 Mix', artists: [{name: 'The Beatles'}], album: {images: [{url: 'https://via.placeholder.com/50'}, {url: 'https://via.placeholder.com/50'}]} }
-        ];
-        return mockDb.filter(t => t.name.toLowerCase().includes(query.toLowerCase()));
-    }
 
     try {
         // Here we hit our Secure Edge Backend!
