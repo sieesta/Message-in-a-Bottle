@@ -127,7 +127,9 @@
             <div class="bottle-scaler" style="margin: 3rem auto; display: flex; justify-content: center; height: 400px; transform: scale(1);">
                 <div class="floating-bottle" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5rem 1.5rem 2rem 1.5rem; box-sizing: border-box; text-align: center;">
                     <div class="bottle-glow"></div>
-                    <div class="bottle-shape"></div>
+                    <div class="bottle-shape">
+                        <div class="bottle-neck-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: inherit; background: transparent; opacity: 0; transition: opacity 2s ease-in-out; z-index: 1;"></div>
+                    </div>
                     
                     <h2 style="position: relative; z-index: 10; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; font-weight: 500; color: #000; line-height: 1.5; text-shadow: none;">This memory<br>is sealed.</h2>
                     <div id="countdown" style="position: relative; z-index: 10; font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 1px; margin: 1.2rem 0; color: #000; text-shadow: none;">Unlocking soon...</div>
@@ -216,7 +218,7 @@ Past Me
             
             if (bottle && bottle.mood && bottleTints[bottle.mood]) {
                 const glow = document.querySelector('.bottle-glow');
-                const neck = document.querySelector('.bottle-shape');
+                const neckGlow = document.querySelector('.bottle-neck-glow');
                 
                 if (glow) {
                     glow.style.background = bottleTints[bottle.mood];
@@ -224,11 +226,9 @@ Past Me
                     setTimeout(() => glow.style.opacity = '1', 100);
                 }
                 
-                if (neck) {
-                    neck.style.transition = 'background 2s ease-in-out';
-                    setTimeout(() => {
-                        neck.style.background = bottleTints[bottle.mood];
-                    }, 100);
+                if (neckGlow) {
+                    neckGlow.style.background = bottleTints[bottle.mood];
+                    setTimeout(() => neckGlow.style.opacity = '1', 100);
                 }
             }
             
