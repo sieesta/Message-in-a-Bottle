@@ -149,6 +149,15 @@ Past Me
                 // Add Music Player
                 if(musicDataStr) {
                     spotifyPlayer.innerHTML = getMusicEmbedPlayer(musicDataStr);
+                    
+                    // Force background music to play immediately on click
+                    setTimeout(() => {
+                        const audio = document.getElementById('bottleAudio');
+                        if (audio) {
+                            audio.volume = 0.4; // 40% volume for a smoother background vibe
+                            audio.play().catch(e => console.log("Autoplay blocked:", e));
+                        }
+                    }, 50);
                 }
                 
                 unlockedState.classList.add('revealed');

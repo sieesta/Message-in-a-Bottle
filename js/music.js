@@ -41,7 +41,7 @@ function getMusicEmbedPlayer(musicDataStr) {
                 <div style="flex-grow: 1; display:flex; flex-direction:column; justify-content:center;">
                     <div style="font-weight:bold; color:#333;">${music.trackName}</div>
                     <div style="font-size:0.85rem; color:#666; margin-bottom:10px;">${music.artistName}</div>
-                    <audio controls autoplay style="width:100%; height:30px; outline:none; background:transparent;">
+                    <audio id="bottleAudio" controls autoplay loop style="width:100%; height:30px; outline:none; background:transparent;">
                         <source src="${previewUrl}" type="audio/mp4">
                         Your browser does not support the audio element.
                     </audio>
