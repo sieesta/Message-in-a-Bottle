@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bottle | Message in a Bottle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css?v=2">
     <style>
         .viewer-container {
@@ -73,7 +74,7 @@
         }
         @keyframes vanishBottle {
             0% { transform: scale(1); opacity: 1; filter: blur(0); }
-            100% { transform: scale(1.5); opacity: 0; filter: blur(20px); }
+            100% { transform: scale(4); opacity: 0; filter: blur(20px); }
         }
         .bottle-opening::before {
             animation: popCork 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
@@ -115,9 +116,9 @@
                     <div class="bottle-glow"></div>
                     <div class="bottle-shape"></div>
                     
-                    <h2 style="position: relative; z-index: 10; font-size: 1.15rem; font-weight: 600; color: #000; line-height: 1.5; text-shadow: none;">This memory<br>is sealed.</h2>
-                    <div id="countdown" style="position: relative; z-index: 10; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin: 1.2rem 0; color: #000; text-shadow: none;">Unlocking soon...</div>
-                    <button id="openBtn" class="btn-primary" style="position: relative; z-index: 10; display:none; margin-top: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.85rem; border-radius: 30px; background: transparent; color: #000; border: 2px solid #000; box-shadow: none; font-weight: 700;">Break the Seal</button>
+                    <h2 style="position: relative; z-index: 10; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; font-weight: 500; color: #000; line-height: 1.5; text-shadow: none;">This memory<br>is sealed.</h2>
+                    <div id="countdown" style="position: relative; z-index: 10; font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; letter-spacing: 1px; margin: 1.2rem 0; color: #000; text-shadow: none;">Unlocking soon...</div>
+                    <button id="openBtn" class="btn-primary" style="position: relative; z-index: 10; display:none; margin-top: 0.5rem; padding: 0.4rem 1.2rem; font-family: 'Playfair Display', serif; font-size: 0.95rem; border-radius: 30px; background: transparent; color: #000; border: 1.5px solid #000; box-shadow: none; font-weight: 700;">Break the Seal</button>
                 </div>
             </div>
         </div>
