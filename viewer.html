@@ -109,7 +109,7 @@ Past Me
     </main>
 
     <script src="js/main.js"></script>
-    <script src="js/spotify.js"></script>
+    <script src="js/music.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const lockedState = document.getElementById('lockedState');
@@ -121,7 +121,7 @@ Past Me
             const unlockDate = new Date();
             unlockDate.setSeconds(unlockDate.getSeconds() + 5); // Unlocks in 5 seconds for demo
             
-            const spotifyLink = 'https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp'; // Example link
+            const musicDataStr = '{"previewUrl":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/80/75/a6/8075a687-ccbb-7d84-c4a0-53bc1be19e78/mzaf_8407421151613045353.plus.aac.p.m4a", "artworkUrl100":"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/11/49/b7/1149b71e-dc0f-8cfa-ed89-8d18b2cba726/075679967167.jpg/100x100bb.jpg", "trackName":"A Thousand Years", "artistName":"Christina Perri"}'; // Example data
             
             const countdownEl = document.getElementById('countdown');
             
@@ -146,9 +146,9 @@ Past Me
             openBtn.addEventListener('click', () => {
                 lockedState.style.display = 'none';
                 
-                // Add Spotify embed
-                if(spotifyLink) {
-                    spotifyPlayer.innerHTML = getSpotifyEmbedIframe(spotifyLink);
+                // Add Music Player
+                if(musicDataStr) {
+                    spotifyPlayer.innerHTML = getMusicEmbedPlayer(musicDataStr);
                 }
                 
                 unlockedState.classList.add('revealed');
