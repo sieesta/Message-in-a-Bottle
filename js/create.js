@@ -20,6 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     timeInput.min = today.toISOString().split('T')[0];
 
+    // Open calendar picker when clicking the date input part
+    timeInput.addEventListener('click', function() {
+        try {
+            if (typeof this.showPicker === 'function') {
+                this.showPicker();
+            }
+        } catch(e) {
+            console.warn("showPicker() not supported on this browser.");
+        }
+    });
+
     function updatePreviewBottle() {
         if (!previewBottle) {
             return;
@@ -177,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const title = document.getElementById('bottleTitle').value;
+            const recipientName = document.getElementById('recipientName').value || 'Friend';
             const message = document.getElementById('bottleMessage').value;
             const unlockDate = document.getElementById('unlockDate').value;
             const selectedMood = moodSelect.value;
@@ -200,7 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 mood,
                 moodColor,
                 unlockDate,
-                musicData
+                musicData,
+                recipientName,
+                null // Dropped email entirely
             );
 
             if (error) {

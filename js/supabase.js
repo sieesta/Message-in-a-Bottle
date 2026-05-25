@@ -31,7 +31,7 @@ async function logoutUser() {
     return { error };
 }
 
-async function createBottle(userId, title, message, mood, themeColor, unlockDate, spotifyUrl) {
+async function createBottle(userId, title, message, mood, themeColor, unlockDate, spotifyUrl, recipientName, recipientEmail) {
     const basePayload = {
         user_id: userId,
         title: title,
@@ -40,7 +40,9 @@ async function createBottle(userId, title, message, mood, themeColor, unlockDate
         theme: themeColor,
         unlock_date: unlockDate,
         spotify_url: spotifyUrl,
-        opened: false
+        opened: false,
+        recipient_name: recipientName,
+        recipient_email: recipientEmail
     };
 
     const primaryPayload = {

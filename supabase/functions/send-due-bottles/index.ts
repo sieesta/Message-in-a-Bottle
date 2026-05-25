@@ -7,6 +7,8 @@ type DueBottle = {
   mood: string;
   unlock_date: string;
   theme: string | null;
+  recipient_name: string | null;
+  recipient_email: string | null;
   profiles?: {
     email: string | null;
     username: string | null;
@@ -34,7 +36,7 @@ Deno.serve(async () => {
 
   const { data: bottles, error: fetchError } = await admin
     .from('bottles')
-    .select('id, title, message, mood, unlock_date, theme, opened, delivery_status, delivered_at, profiles!inner(email, username)')
+    .select('id, title, message, mood, unlock_date, theme, opened, delivery_status, delivered_at, recipient_name, recipient_email, profiles!inner(email, username)')
     .lte('unlock_date', today)
     .is('delivered_at', null)
     .eq('opened', false)
@@ -51,7 +53,10 @@ Deno.serve(async () => {
   const results: Array<{ id: string; status: string; message: string }> = [];
 
   for (const bottle of dueBottles) {
-    const recipientEmail = bottle.profiles?.email;
+    // Prefer recipient_email if set, otherwise fallback to the creator's email
+    const recipientEmail = bottle.recipient_email || bottle.profiles?.email;
+    const recipientName = bottle.recipient_name || bottle.profiles?.username || 'Friend';
+    const siteUrl = Deno.env.get('YOUR_SITE_URL') || 'https://yourwebsite.com'; // Add YOUR_SITE_URL to Supabase edge function secrets
 
     if (!recipientEmail) {
       await admin.from('bottles').update({
@@ -63,24 +68,26 @@ Deno.serve(async () => {
       continue;
     }
 
-    const subject = `Your memory "${bottle.title}" is ready`;
+    const subject = `A memory "${bottle.title}" has unlocked for you`;
     const text = [
-      `Your memory is ready to open.`,
+      `Hello ${recipientName},`,
+      `A message in a bottle is now ready to open.`,
       '',
       `Title: ${bottle.title}`,
       `Mood: ${bottle.mood}`,
       `Unlock date: ${bottle.unlock_date}`,
       '',
-      bottle.message
+      `Open it here: ${siteUrl}/viewer.html?id=${bottle.id}`
     ].join('\n');
 
     const html = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937; max-width: 680px; margin: 0 auto; padding: 24px;">
-        <h1 style="font-size: 24px; margin-bottom: 8px;">Your memory is ready to open</h1>
+        <h1 style="font-size: 24px; margin-bottom: 8px;">Hello ${escapeHtml(recipientName)},</h1>
+        <p style="margin: 0 0 16px 0;">A memory is now ready to open.</p>
         <p style="margin: 0 0 16px 0;"><strong>Title:</strong> ${escapeHtml(bottle.title)}</p>
         <p style="margin: 0 0 16px 0;"><strong>Mood:</strong> ${escapeHtml(bottle.mood)}</p>
-        <div style="white-space: pre-wrap; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px; margin: 20px 0;">${escapeHtml(bottle.message)}</div>
-        <p style="margin: 0; color: #6b7280;">Open it in Message in a Bottle when you are ready.</p>
+        <a href="${siteUrl}/viewer.html?id=${bottle.id}" style="display: inline-block; background-color: #000; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 30px; font-weight: bold; margin: 20px 0;">Break the Seal</a>
+        <p style="margin: 0; color: #6b7280;">Or copy and paste this link: ${siteUrl}/viewer.html?id=${bottle.id}</p>
       </div>
     `;
 

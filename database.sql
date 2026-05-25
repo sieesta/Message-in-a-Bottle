@@ -33,6 +33,8 @@ CREATE TABLE public.bottles (
   ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivery_status TEXT DEFAULT 'pending';
   ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP WITH TIME ZONE;
   ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS delivery_error TEXT;
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS recipient_name TEXT;
+  ALTER TABLE public.bottles ADD COLUMN IF NOT EXISTS recipient_email TEXT;
 
 -- =======================================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
@@ -53,10 +55,25 @@ CREATE POLICY "Users can update their own profile"
     USING (auth.uid() = id);
 
 -- Bottles: Users have full CRUD access, but ONLY to their own bottles
-CREATE POLICY "Users can fully manage their own bottles" 
-    ON public.bottles FOR ALL 
+-- We allow viewing (SELECT) by anyone so the recipient can view the bottle.
+DROP POLICY IF EXISTS "Users can fully manage their own bottles" ON public.bottles;
+
+CREATE POLICY "Anyone can view bottles" 
+    ON public.bottles FOR SELECT 
+    USING (true);
+
+CREATE POLICY "Users can insert their own bottles" 
+    ON public.bottles FOR INSERT 
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own bottles" 
+    ON public.bottles FOR UPDATE 
     USING (auth.uid() = user_id)
     WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own bottles" 
+    ON public.bottles FOR DELETE 
+    USING (auth.uid() = user_id);
 
 -- =======================================================================================
 -- AUTHENTICATION TRIGGERS

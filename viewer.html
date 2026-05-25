@@ -181,12 +181,7 @@ Past Me
                 return;
             }
             
-            // Check auth
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html';
-                return;
-            }
+            // Allow anyone with the link to view the bottle (no auth check needed for recipients)
 
             // Fetch actual bottle
             const { data: bottle, error } = await supabaseClient
@@ -310,6 +305,13 @@ Past Me
 
             // Delete functionality
             const deleteBtn = document.getElementById('deleteBtn');
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            // Only show delete button if the logged-in user is the owner
+            if (!session || session.user.id !== bottle.user_id) {
+                deleteBtn.style.display = 'none';
+            }
+
             deleteBtn.addEventListener('click', async () => {
                 if (confirm("Are you sure you want to delete this memory permanently?")) {
                     deleteBtn.innerHTML = "Deleting...";
