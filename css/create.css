@@ -222,3 +222,16 @@
     color: var(--text-main);
 }
 
+
+.spotify-search-results {
+    position: absolute;
+    bottom: 100%; /* Pushes it above the input */
+    left: 0;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    z-index: 50; /* Ensure it floats above other content */
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 -8px 25px rgba(0,0,0,0.15); /* Shadow goes UP now */
+}
+

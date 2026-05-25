@@ -39,39 +39,16 @@ function getSpotifyEmbedIframe(spotifyUrl) {
         if (url.hostname === 'open.spotify.com' && url.pathname.startsWith('/track/')) {
             const trackId = url.pathname.split('/')[2];
             return `
-                <div class="spotify-floating-player" style="
-                    animation: floatPlayer 6s ease-in-out infinite;
-                    box-shadow: 0 20px 40px rgba(31, 38, 135, 0.2);
-                    border-radius: 16px;
-                    border: 1px solid rgba(255, 255, 255, 0.5);
-                    background: rgba(255, 255, 255, 0.3);
-                    backdrop-filter: blur(12px);
-                    padding: 10px;
-                    max-width: 450px;
-                    margin: 1.5rem auto 0;
-                    transition: transform 0.3s ease;
-                ">
-                    <style>
-                        @keyframes floatPlayer {
-                            0%, 100% { transform: translateY(0); }
-                            50% { transform: translateY(-12px); }
-                        }
-                        .spotify-floating-player:hover {
-                            transform: scale(1.02) !important;
-                            background: rgba(255, 255, 255, 0.4);
-                        }
-                    </style>
-                    <iframe 
-                        style="border-radius: 12px; display: block;" 
-                        src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0" 
-                        width="100%" 
-                        height="152" 
-                        frameBorder="0" 
-                        allowfullscreen="" 
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                        loading="lazy">
-                    </iframe>
-                </div>
+                <iframe 
+                    style="border-radius:12px" 
+                    src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0" 
+                    width="100%" 
+                    height="152" 
+                    frameBorder="0" 
+                    allowfullscreen="" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    loading="lazy">
+                </iframe>
             `;
         }
     } catch (e) {
