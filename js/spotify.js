@@ -1,42 +1,16 @@
 // Spotify API Integration
 
-const SPOTIFY_CLIENT_ID = 'YOUR_SPOTIFY_CLIENT_ID';
-const SPOTIFY_CLIENT_SECRET = 'YOUR_SPOTIFY_CLIENT_SECRET';
-let spotifyAccessToken = '';
+// We removed the Client ID and Secret from here because it's public!
+// Instead, we will call our secure Supabase Edge Function to do it for us.
 
-async function getSpotifyToken() {
-    if (spotifyAccessToken) return spotifyAccessToken;
-    
-    if (SPOTIFY_CLIENT_ID === 'YOUR_SPOTIFY_CLIENT_ID') {
-        console.warn("Spotify Client ID not set. Using mock data for demo.");
-        return null; // Signals to use mock data
-    }
-
-    try {
-        const response = await fetch('https://accounts.spotify.com/api/token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + btoa(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET)
-            },
-            body: 'grant_type=client_credentials'
-        });
-        const data = await response.json();
-        spotifyAccessToken = data.access_token;
-        return spotifyAccessToken;
-    } catch (e) {
-        console.error("Error fetching Spotify token", e);
-        return null;
-    }
-}
+const SUPABASE_APP_URL = 'YOUR_SUPABASE_URL'; // i.e. https://xyz.supabase.co
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
 async function searchSpotifyTracks(query) {
     if (!query) return [];
     
-    const token = await getSpotifyToken();
-    
-    // Use Mock Data if no token successfully fetched (for demo purposes)
-    if (!token) {
+    // Use Mock Data if you haven't linked Supabase yet (for demo purposes)
+    if (SUPABASE_APP_URL === 'YOUR_SUPABASE_URL') {
         const mockDb = [
             { id: '75JFxkI2RXiU7L9VXzMkle', name: 'The One That Got Away', artists: [{name: 'Katy Perry'}], album: {images: [{url: 'https://i.scdn.co/image/ab67616d000048518aeda0abde1914eb13df420a'}, {url: 'https://i.scdn.co/image/ab67616d000048518aeda0abde1914eb13df420a'}]} },
             { id: '1', name: 'You Are the Right One', artists: [{name: 'Sports'}], album: {images: [{url: 'https://via.placeholder.com/50'}, {url: 'https://via.placeholder.com/50'}]} },
@@ -47,15 +21,22 @@ async function searchSpotifyTracks(query) {
     }
 
     try {
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
+        // Here we hit our Secure Edge Backend!
+        const response = await fetch(`${SUPABASE_APP_URL}/functions/v1/spotify-search`, {
+            method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
-            }
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}` // Anon key is safe in public
+            },
+            body: JSON.stringify({ query: query })
         });
+        
+        if (!response.ok) throw new Error('Edge function failed');
+        
         const data = await response.json();
         return data.tracks.items;
     } catch (e) {
-        console.error("Error searching Spotify", e);
+        console.error("Error searching Spotify via Secure Edge", e);
         return [];
     }
 }
