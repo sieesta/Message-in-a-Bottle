@@ -65,6 +65,22 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        /* Bottle Opening Animations */
+        @keyframes popCork {
+            0% { transform: translateX(-50%) translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateX(-50%) translateY(-150px) rotate(75deg); opacity: 0; }
+        }
+        @keyframes vanishBottle {
+            0% { transform: scale(1.5); opacity: 1; filter: blur(0); }
+            100% { transform: scale(2.5); opacity: 0; filter: blur(20px); }
+        }
+        .bottle-opening::before {
+            animation: popCork 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        }
+        .bottle-opening {
+            animation: vanishBottle 1.2s forwards ease-in 0.4s !important; 
+        }
     </style>
 </head>
 <body class="viewer-page">
@@ -103,6 +119,10 @@ Past Me
             
             <div class="spotify-container" id="spotifyPlayer">
                 <!-- Spotify embed injected here -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 2.5rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1.5rem;">
+                <button id="deleteBtn" class="btn-ghost" style="color: #d90429; border-color: rgba(217, 4, 41, 0.3); font-size: 0.9rem;">Clean up Memory</button>
             </div>
         </div>
 
@@ -186,35 +206,60 @@ Past Me
             }
             
             openBtn.addEventListener('click', () => {
-                lockedState.style.display = 'none';
+                // 1. Focus entirely on the bottle by hiding the text and button
+                openBtn.style.display = 'none';
+                countdownEl.style.display = 'none';
+                document.querySelector('#lockedState h2').style.display = 'none';
                 
-                // Add Music Player
-                if(musicDataStr) {
-                    spotifyPlayer.innerHTML = getMusicEmbedPlayer(musicDataStr);
+                // 2. Trigger the "opening" animations on the CSS
+                const bottleImg = document.querySelector('.floating-bottle');
+                bottleImg.classList.add('bottle-opening');
+                
+                // 3. Wait for animation to finish before transitioning into the inner memory
+                setTimeout(() => {
+                    lockedState.style.display = 'none';
                     
-                    // Force background music to play immediately on click
-                    setTimeout(() => {
-                        const audio = document.getElementById('bottleAudio');
-                        if (audio) {
-                            audio.volume = 0.4; // 40% volume for a smoother background vibe
-                            audio.play().catch(e => console.log("Autoplay blocked:", e));
-                        }
-                    }, 50);
-                }
-                
-                unlockedState.classList.add('revealed');
-                
-                // Change background to reflect mood so bubbles remain visible against color
-                const bgColors = {
-                    happy: 'linear-gradient(135deg, #ffb703 0%, #fb8500 100%)',
-                    sad: 'linear-gradient(135deg, #003566 0%, #023e8a 100%)',
-                    calm: 'linear-gradient(135deg, #8ecae6 0%, #219ebc 100%)',
-                    hopeful: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-                    romantic: 'linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%)'
-                };
-                
-                if (bottle && bottle.mood && bgColors[bottle.mood]) {
-                    document.body.style.background = bgColors[bottle.mood];
+                    // Add Music Player
+                    if(musicDataStr) {
+                        spotifyPlayer.innerHTML = getMusicEmbedPlayer(musicDataStr);
+                        
+                        // Force background music to play immediately on click
+                        setTimeout(() => {
+                            const audio = document.getElementById('bottleAudio');
+                            if (audio) {
+                                audio.volume = 0.4; // 40% volume for a smoother background vibe
+                                audio.play().catch(e => console.log("Autoplay blocked:", e));
+                            }
+                        }, 50);
+                    }
+                    
+                    unlockedState.classList.add('revealed');
+                    
+                    // Change background to reflect mood so bubbles remain visible against color
+                    const bgColors = {
+                        happy: 'linear-gradient(135deg, #ffb703 0%, #fb8500 100%)',
+                        sad: 'linear-gradient(135deg, #003566 0%, #023e8a 100%)',
+                        calm: 'linear-gradient(135deg, #8ecae6 0%, #219ebc 100%)',
+                        hopeful: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                        romantic: 'linear-gradient(135deg, #ffafcc 0%, #ffc8dd 100%)'
+                    };
+                    
+                    if (bottle && bottle.mood && bgColors[bottle.mood]) {
+                        document.body.style.background = bgColors[bottle.mood];
+                    }
+                }, 1600); // 1.6 second animation wait time
+            });
+
+            // Delete functionality
+            const deleteBtn = document.getElementById('deleteBtn');
+            deleteBtn.addEventListener('click', async () => {
+                if (confirm("Are you sure you want to delete this memory permanently?")) {
+                    deleteBtn.innerHTML = "Deleting...";
+                    deleteBtn.disabled = true;
+                    // Delete from Supabase Database completely
+                    await supabaseClient.from('bottles').delete().eq('id', bottle.id);
+                    // Navigate back to user Dashboard
+                    window.location.href = 'dashboard.html';
                 }
             });
         });
