@@ -64,13 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
         searchTimeout = setTimeout(async () => {
             try {
                 const tracks = await searchSpotifyTracks(query);
-                if (tracks.length > 0) {
-                    renderSearchResults(tracks);
-                }
+                // Even if empty, we want to render it to show "No songs found"
+                renderSearchResults(tracks);
             } catch (err) {
                 console.error(err);
                 searchResults.innerHTML = `<div style="padding:1rem; color:red; font-size:0.85rem; text-align:center;">
-                    <b>Spotify Search failed.</b><br/>${err.message}
+                    <b>Spotify Search API Error.</b><br/>${err.message}
                 </div>`;
                 searchResults.classList.add('active');
             }

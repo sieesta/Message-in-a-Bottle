@@ -26,10 +26,17 @@ async function searchSpotifyTracks(query) {
         }
         
         const data = await response.json();
+        
+        // Handle case where edge function is running default placeholder code
+        if (!data.tracks || !data.tracks.items) {
+            console.error("Invalid response from Edge Function:", data);
+            throw new Error("Edge Function is returning invalid data. Did you paste the complete index.ts code into Supabase?");
+        }
+        
         return data.tracks.items;
     } catch (e) {
         console.error("Error searching Spotify via Secure Edge", e);
-        return [];
+        throw e; // We MUST throw this so create.js can catch and display the error!
     }
 }
 
