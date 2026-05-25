@@ -47,3 +47,21 @@ async function createBottle(userId, title, message, mood, unlockDate, spotifyUrl
         ]);
     return { data, error };
 }
+
+async function getUserBottles(userId) {
+    const { data, error } = await supabaseClient
+        .from('bottles')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+    return { data, error };
+}
+
+async function getUserProfile(userId) {
+    const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('username')
+        .eq('id', userId)
+        .single();
+    return { data, error };
+}
