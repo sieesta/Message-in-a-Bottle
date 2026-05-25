@@ -108,31 +108,65 @@ Past Me
 
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
     <script src="js/main.js"></script>
     <script src="js/music.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const lockedState = document.getElementById('lockedState');
             const unlockedState = document.getElementById('unlockedState');
             const openBtn = document.getElementById('openBtn');
             const spotifyPlayer = document.getElementById('spotifyPlayer');
-            
-            // Example data (In a real app, fetched from Supabase)
-            const unlockDate = new Date();
-            unlockDate.setSeconds(unlockDate.getSeconds() + 5); // Unlocks in 5 seconds for demo
-            
-            const musicDataStr = '{"previewUrl":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/80/75/a6/8075a687-ccbb-7d84-c4a0-53bc1be19e78/mzaf_8407421151613045353.plus.aac.p.m4a", "artworkUrl100":"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/11/49/b7/1149b71e-dc0f-8cfa-ed89-8d18b2cba726/075679967167.jpg/100x100bb.jpg", "trackName":"A Thousand Years", "artistName":"Christina Perri"}'; // Example data
-            
             const countdownEl = document.getElementById('countdown');
+            
+            // Get bottle ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const bottleId = urlParams.get('id');
+            
+            if (!bottleId) {
+                countdownEl.innerHTML = "No bottle selected.";
+                return;
+            }
+            
+            // Check auth
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Fetch actual bottle
+            const { data: bottle, error } = await supabaseClient
+                .from('bottles')
+                .select('*')
+                .eq('id', bottleId)
+                .single();
+
+            if (error || !bottle) {
+                countdownEl.innerHTML = "Bottle not found or access denied.";
+                return;
+            }
+            
+            const unlockDate = new Date(bottle.unlock_date);
+            const musicDataStr = bottle.spotify_url; // It's our JSON string
+            
+            document.getElementById('viewTitle').textContent = bottle.title;
+            document.getElementById('viewMessage').textContent = bottle.message;
             
             const interval = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = unlockDate.getTime() - now;
                 
-                if (distance < 0) {
+                if (distance <= 0) {
                     clearInterval(interval);
                     countdownEl.innerHTML = "The time has come.";
                     openBtn.style.display = 'inline-block';
+                    
+                    // Mark as opened in DB if not already
+                    if (!bottle.opened) {
+                        supabaseClient.from('bottles').update({ opened: true }).eq('id', bottle.id).then();
+                    }
                 } else {
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -142,6 +176,14 @@ Past Me
                     countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
                 }
             }, 1000);
+            
+            // Run immediately once so we don't wait 1s
+            const initialDistance = unlockDate.getTime() - new Date().getTime();
+            if(initialDistance <= 0) {
+                 clearInterval(interval);
+                 countdownEl.innerHTML = "The time has come.";
+                 openBtn.style.display = 'inline-block';
+            }
             
             openBtn.addEventListener('click', () => {
                 lockedState.style.display = 'none';

@@ -11,10 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const removeSongBtn = document.getElementById('removeSongBtn');
     const hidTrackUrl = document.getElementById('spotifyTrackUrl');
 
-    // Set minimum date to tomorrow
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    timeInput.min = tomorrow.toISOString().split('T')[0];
+    // Set minimum date to today (for testing allowing "Can unlock now")
+    const today = new Date();
+    timeInput.min = today.toISOString().split('T')[0];
 
     // Mood preview logic
     moodSelect.addEventListener('change', (e) => {

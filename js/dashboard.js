@@ -59,15 +59,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             // Inject dynamic HTML
             const localeDate = unlockDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const isUnlocked = unlockDate <= now;
             
             const div = document.createElement('div');
-            div.className = `bottle-item locked`;
+            // Remove 'locked' class if it's already unlockable
+            div.className = `bottle-item ${isUnlocked ? '' : 'locked'}`;
+            // Add a cursor pointer and click handler so we can open it!
+            div.style.cursor = 'pointer';
+            
             div.innerHTML = `
-                <div class="bottle-icon" style="background: ${getMoodGradient(bottle.mood)}"></div>
+                <div class="bottle-icon" style="background: ${getMoodGradient(bottle.mood)}; ${isUnlocked ? 'box-shadow: 0 0 20px ' + getMoodGradient(bottle.mood) : ''}"></div>
                 <h4>${bottle.title}</h4>
-                <p class="unlock-date">Unlocks: ${localeDate}</p>
+                <p class="unlock-date" style="color: ${isUnlocked ? '#2a9d8f' : ''}">
+                    ${isUnlocked ? 'Ready to Open!' : 'Unlocks: ' + localeDate}
+                </p>
                 <div class="mood-tag ${bottle.mood}">${bottle.mood.charAt(0).toUpperCase() + bottle.mood.slice(1)}</div>
             `;
+            
+            // Navigate to viewer!
+            div.addEventListener('click', () => {
+                window.location.href = `viewer.html?id=${bottle.id}`;
+            });
+            
             bottlesGrid.appendChild(div);
         });
     }
