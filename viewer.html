@@ -72,13 +72,13 @@
             100% { transform: translateX(-50%) translateY(-150px) rotate(75deg); opacity: 0; }
         }
         @keyframes vanishBottle {
-            0% { transform: scale(1); opacity: 1; filter: blur(0); }
-            100% { transform: scale(1.5); opacity: 0; filter: blur(20px); }
+            0% { transform: scale(1.6); opacity: 1; filter: blur(0); }
+            100% { transform: scale(3); opacity: 0; filter: blur(20px); }
         }
         .bottle-opening::before {
             animation: popCork 0.8s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
-        .bottle-opening {
+        .bottle-vanish {
             animation: vanishBottle 1.2s forwards ease-in 0.4s !important; 
         }
         
@@ -115,9 +115,9 @@
                     <div class="bottle-glow"></div>
                     <div class="bottle-shape"></div>
                     
-                    <h2 style="position: relative; z-index: 10; font-size: 1.15rem; font-family: serif; font-style: italic; font-weight: 500; color: #1d3557; line-height: 1.5; text-shadow: 0 0 15px rgba(255,255,255,1);">This memory<br>is sealed.</h2>
-                    <div id="countdown" style="position: relative; z-index: 10; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin: 1.2rem 0; color: #e63946; text-shadow: 0 0 12px rgba(255,255,255,1);">Unlocking soon...</div>
-                    <button id="openBtn" class="btn-primary" style="position: relative; z-index: 10; display:none; margin-top: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.85rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">Break the Seal</button>
+                    <h2 style="position: relative; z-index: 10; font-size: 1.15rem; font-family: serif; font-style: italic; font-weight: 500; color: #000; line-height: 1.5; text-shadow: none;">This memory<br>is sealed.</h2>
+                    <div id="countdown" style="position: relative; z-index: 10; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; margin: 1.2rem 0; color: #000; text-shadow: none;">Unlocking soon...</div>
+                    <button id="openBtn" class="btn-primary" style="position: relative; z-index: 10; display:none; margin-top: 0.5rem; padding: 0.5rem 1.2rem; font-size: 0.85rem; border-radius: 30px; background: transparent; color: #000; border: 1px solid #000; box-shadow: none; font-weight: 600;">Break the Seal</button>
                 </div>
             </div>
         </div>
@@ -228,6 +228,9 @@ Past Me
                 document.querySelector('#lockedState h2').style.display = 'none';
                 
                 // 2. Trigger the "opening" animations on the CSS
+                const bottleScaler = document.querySelector('.bottle-scaler');
+                bottleScaler.classList.add('bottle-vanish');
+                
                 const bottleImg = document.querySelector('.floating-bottle');
                 bottleImg.classList.add('bottle-opening');
                 
